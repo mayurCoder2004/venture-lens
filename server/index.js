@@ -12,7 +12,7 @@ app.use(express.json());
 
 // Test route
 app.get("/", (req, res) => {
-  res.json({ message: "Backend is working!" });
+  res.send("Backend is running");
 });
 
 const PORT = process.env.PORT || 5000;
