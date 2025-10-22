@@ -11,41 +11,41 @@ const Navbar = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
           <img
-            src="/venture-lens-logo.png" // <-- replace this path with your actual logo image path
+            src="/venture-lens-logo.png"
             alt="AI Idea Validator Logo"
             className="h-20 w-20 object-contain"
           />
         </Link>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex gap-6 text-gray-700 font-medium">
-          <Link to="/" className="hover:text-purple-700 transition">Home</Link>
-          <Link to="/dashboard" className="hover:text-purple-700 transition">Dashboard</Link>
-          <Link to="/login" className="hover:text-purple-700 transition">Login</Link>
+        <div className="hidden md:flex gap-6 text-blue-700 font-medium">
+          <Link to="/" className="hover:text-yellow-400 transition">Home</Link>
+          <Link to="/dashboard" className="hover:text-yellow-400 transition">Dashboard</Link>
+          <Link to="/login" className="hover:text-yellow-400 transition">Login</Link>
           <Link
             to="/signup"
-            className="bg-purple-600 text-white px-4 py-1.5 rounded-md hover:bg-purple-700 transition"
+            className="bg-yellow-400 text-blue-700 px-4 py-1.5 rounded-md hover:bg-yellow-300 transition"
           >
             Sign Up
           </Link>
         </div>
 
         {/* Mobile Menu Button */}
-        <button onClick={() => setOpen(!open)} className="md:hidden text-gray-700">
+        <button onClick={() => setOpen(!open)} className="md:hidden text-blue-700">
           {open ? <X size={26} /> : <Menu size={26} />}
         </button>
       </div>
 
       {/* Mobile Dropdown Menu */}
       {open && (
-        <div className="md:hidden bg-white border-t shadow-md py-3 flex flex-col items-center gap-4">
-          <Link to="/" onClick={() => setOpen(false)} className="hover:text-purple-700">Home</Link>
-          <Link to="/dashboard" onClick={() => setOpen(false)} className="hover:text-purple-700">Dashboard</Link>
-          <Link to="/login" onClick={() => setOpen(false)} className="hover:text-purple-700">Login</Link>
+        <div className="md:hidden bg-white border-t border-blue-200 shadow-md py-3 flex flex-col items-center gap-4">
+          <Link to="/" onClick={() => setOpen(false)} className="text-blue-700 hover:text-yellow-400 transition">Home</Link>
+          <Link to="/dashboard" onClick={() => setOpen(false)} className="text-blue-700 hover:text-yellow-400 transition">Dashboard</Link>
+          <Link to="/login" onClick={() => setOpen(false)} className="text-blue-700 hover:text-yellow-400 transition">Login</Link>
           <Link
             to="/signup"
             onClick={() => setOpen(false)}
-            className="bg-purple-600 text-white px-4 py-1.5 rounded-md hover:bg-purple-700"
+            className="bg-yellow-400 text-blue-700 px-4 py-1.5 rounded-md hover:bg-yellow-300 transition"
           >
             Sign Up
           </Link>
