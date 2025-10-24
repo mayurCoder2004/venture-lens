@@ -40,8 +40,16 @@ export const login = async (req, res) => {
       { expiresIn: "7d" }
     );
 
-    res.json({ token, name: user.name });
+    // Send user as an object
+    res.json({ 
+      token, 
+      user: { 
+        name: user.name, 
+        email: user.email 
+      } 
+    });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
 };
+

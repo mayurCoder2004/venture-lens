@@ -21,8 +21,11 @@ const LoginPage = () => {
 
     try {
       const res = await API.post("/auth/login", formData);
-      login(res.data.token);
-      navigate("/analyze");
+
+      // Assuming backend returns: { token: "...", user: { name: "...", email: "..." } }
+      login(res.data.token, res.data.user);
+
+      navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Invalid credentials");
     }
