@@ -1,4 +1,3 @@
-// routes/analyzeIdeaRoutes.js
 import express from "express";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 import { analyzeIdea } from "../controller/ideaController.js";

@@ -1,11 +1,11 @@
-import { analyzeIdeaWithGemini } from "../services/geminiService.js";
+import { analyzeIdeaWithOpenRouter } from "../services/openRouterService.js";
 
 export const analyzeIdea = async (req, res) => {
   try {
     const { idea } = req.body;
     if (!idea) return res.status(400).json({ message: "Idea is required" });
 
-    const analysis = await analyzeIdeaWithGemini(idea);
+    const analysis = await analyzeIdeaWithOpenRouter(idea);
     res.json({ analysis });
 
   } catch (err) {
