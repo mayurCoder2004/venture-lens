@@ -51,14 +51,41 @@ const DashboardPage = () => {
       <DashboardStats ideas={ideas} />
 
       <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {ideas.length > 0 ? (
-          ideas.map((idea) => (
-            <IdeaCard key={idea._id} idea={idea} onDelete={handleDelete} />
-          ))
-        ) : (
-          <p className="text-gray-600 text-center col-span-full">No ideas analyzed yet.</p>
-        )}
+  {ideas.length > 0 ? (
+    ideas.map((idea) => (
+      <div
+        key={idea._id}
+        className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition"
+      >
+        <h2 className="text-xl font-semibold text-purple-700 mb-2">
+          {idea.idea || "Untitled Idea"}
+        </h2>
+        <p className="text-gray-600 mb-2">
+          <strong>Score:</strong> {idea.score || "N/A"}
+        </p>
+        <p className="text-sm text-gray-500 mb-4">
+          {new Date(idea.createdAt).toLocaleDateString()}
+        </p>
+        <button
+          onClick={() => handleViewDetails(idea)}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+        >
+          View Details
+        </button>
+        <button
+          onClick={() => handleDelete(idea._id)}
+          className="ml-3 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+        >
+          Delete
+        </button>
       </div>
+    ))
+  ) : (
+    <p className="text-gray-600 text-center col-span-full">
+      No ideas analyzed yet.
+    </p>
+  )}
+</div>
     </div>
   );
 };

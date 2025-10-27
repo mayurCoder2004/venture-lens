@@ -51,3 +51,21 @@ export const deleteIdea = async (req, res) => {
     res.status(500).json({ message: "Failed to delete idea", error: err.message });
   }
 };
+
+export const saveIdea = async (req, res) => {
+  try {
+    const { idea, analysis } = req.body;
+    const userId = req.user.id;
+
+    if (!idea || !analysis)
+      return res.status(400).json({ message: "Idea and analysis are required" });
+
+    const newIdea = new Idea({ user: userId, idea, analysis });
+    await newIdea.save();
+
+    res.status(201).json({ message: "Idea saved successfully", idea: newIdea });
+  } catch (err) {
+    console.error("Error saving idea:", err);
+    res.status(500).json({ message: "Failed to save idea", error: err.message });
+  }
+};

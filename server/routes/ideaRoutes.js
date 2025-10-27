@@ -1,11 +1,17 @@
 import express from "express";
-import { authMiddleware } from "../middleware/authMiddleware.js";
-import { analyzeIdea, getUserIdeas, deleteIdea } from "../controller/ideaController.js";
+import {
+  analyzeIdea,
+  getUserIdeas,
+  deleteIdea,
+  saveIdea,
+} from "../controller/ideaController.js";
+import { authMiddleware } from "../middleware/authMiddleware.js"; // ✅ if using auth
 
 const router = express.Router();
 
 router.post("/", authMiddleware, analyzeIdea);
+router.post("/save", authMiddleware, saveIdea);
 router.get("/", authMiddleware, getUserIdeas);
 router.delete("/:id", authMiddleware, deleteIdea);
 
-export default router;
+export default router; // ✅ this fixes the issue

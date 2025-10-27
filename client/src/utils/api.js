@@ -48,4 +48,15 @@ export const deleteIdea = async (id) => {
   }
 };
 
+export const saveIdea = async (idea, analysis) => {
+  try {
+    const res = await API.post("/analyze/save", { idea, analysis });
+    return res.data;
+  } catch (err) {
+    console.error("❌ Failed to save idea:", err);
+    throw err;
+  }
+};
+
+
 export default API;

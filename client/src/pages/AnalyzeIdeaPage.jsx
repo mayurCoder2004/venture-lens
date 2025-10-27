@@ -11,8 +11,14 @@ const AnalyzePage = () => {
     setLoading(true);
     setResult(null);
     try {
-      const analysis = await analyzeIdea(idea);
-      setResult(analysis);
+      const response = await analyzeIdea(idea);
+
+      // 🧠 Backend returns: { message, idea: { idea, analysis } }
+      const finalResult = response?.idea
+        ? { idea: response.idea.idea, analysis: response.idea.analysis }
+        : { idea, analysis: response.analysis || response };
+
+      setResult(finalResult);
     } catch (error) {
       alert("Error analyzing idea. Please try again.");
     } finally {
@@ -22,9 +28,15 @@ const AnalyzePage = () => {
 
   return (
     <div className="max-w-2xl mx-auto mt-10">
-      <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">💡 VentureLens - Idea Analyzer</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
+        💡 VentureLens - Idea Analyzer
+      </h1>
       <IdeaForm onAnalyze={handleAnalyze} />
-      {loading && <p className="mt-4 text-center text-blue-600">Analyzing your idea... please wait ⏳</p>}
+      {loading && (
+        <p className="mt-4 text-center text-blue-600">
+          Analyzing your idea... please wait ⏳
+        </p>
+      )}
       <IdeaResult result={result} />
     </div>
   );
