@@ -8,6 +8,7 @@ import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import AnalyzeIdeaPage from "./pages/AnalyzeIdeaPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import IdeaDetailsPage from "./pages/IdeaDetailsPage";
 
 function App() {
   return (
@@ -36,6 +37,15 @@ function App() {
               element={
                 <ProtectedRoute>
                   <AnalyzeIdeaPage />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/idea/:id"
+              element={
+                <ProtectedRoute>
+                  <IdeaDetailsPage />
                 </ProtectedRoute>
               }
             />

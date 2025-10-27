@@ -69,3 +69,19 @@ export const saveIdea = async (req, res) => {
     res.status(500).json({ message: "Failed to save idea", error: err.message });
   }
 };
+
+// 🧩 Get a single idea by ID
+export const getIdeaById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+
+    const idea = await Idea.findOne({ _id: id, user: userId });
+    if (!idea) return res.status(404).json({ message: "Idea not found" });
+
+    res.json(idea);
+  } catch (err) {
+    console.error("Error fetching idea by ID:", err);
+    res.status(500).json({ message: "Failed to fetch idea", error: err.message });
+  }
+};

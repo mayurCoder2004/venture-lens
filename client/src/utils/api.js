@@ -58,5 +58,16 @@ export const saveIdea = async (idea, analysis) => {
   }
 };
 
+// 🔹 Get single idea by ID
+export const getIdeaById = async (id) => {
+  try {
+    const res = await API.get(`/analyze/${id}`);
+    return res.data;
+  } catch (err) {
+    console.error("❌ Failed to fetch idea by ID:", err);
+    throw err;
+  }
+};
+
 
 export default API;

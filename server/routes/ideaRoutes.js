@@ -4,14 +4,16 @@ import {
   getUserIdeas,
   deleteIdea,
   saveIdea,
+  getIdeaById, // ✅ new
 } from "../controller/ideaController.js";
-import { authMiddleware } from "../middleware/authMiddleware.js"; // ✅ if using auth
+import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
 router.post("/", authMiddleware, analyzeIdea);
 router.post("/save", authMiddleware, saveIdea);
 router.get("/", authMiddleware, getUserIdeas);
+router.get("/:id", authMiddleware, getIdeaById);
 router.delete("/:id", authMiddleware, deleteIdea);
 
-export default router; // ✅ this fixes the issue
+export default router;
