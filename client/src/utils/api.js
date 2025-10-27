@@ -11,4 +11,18 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
+export const analyzeIdea = async (idea) => {
+  try {
+    const response = await API.post("/analyze", { idea });
+    return response.data.analysis || response.data;
+  } catch (error) {
+    console.error("❌ Error analyzing idea:", error);
+    throw (
+      error.response?.data?.error ||
+      error.message ||
+      "Failed to analyze idea"
+    );
+  }
+};
+
 export default API;
