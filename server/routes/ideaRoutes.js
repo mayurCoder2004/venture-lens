@@ -4,7 +4,8 @@ import {
   getUserIdeas,
   deleteIdea,
   saveIdea,
-  getIdeaById, // ✅ new
+  getIdeaById,
+  generatePitchDeck,
 } from "../controller/ideaController.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 
@@ -15,5 +16,6 @@ router.post("/save", authMiddleware, saveIdea);
 router.get("/", authMiddleware, getUserIdeas);
 router.get("/:id", authMiddleware, getIdeaById);
 router.delete("/:id", authMiddleware, deleteIdea);
+router.post("/generate-pdf", authMiddleware, generatePitchDeck);
 
 export default router;

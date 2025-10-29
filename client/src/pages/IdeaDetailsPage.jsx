@@ -3,7 +3,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getIdeaById } from "../utils/api";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { ArrowLeft, Lightbulb, Calendar, Loader2, AlertCircle, Sparkles } from "lucide-react";
+import {
+  ArrowLeft,
+  Lightbulb,
+  Calendar,
+  Loader2,
+  AlertCircle,
+  Sparkles,
+} from "lucide-react";
 
 const IdeaDetailsPage = () => {
   const { id } = useParams();
@@ -25,12 +32,47 @@ const IdeaDetailsPage = () => {
     fetchIdea();
   }, [id]);
 
+  const handleGeneratePitchDeck = async () => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/analyze/generate-pdf`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            idea: idea.idea,
+            analysis: idea.analysis,
+          }),
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to generate PDF");
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${idea.idea.replace(/\s+/g, "_")}_PitchDeck.pdf`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error(error);
+      alert("❌ Failed to generate pitch deck. Try again.");
+    }
+  };
+
   if (loading)
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
         <div className="relative">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full blur-xl opacity-20 animate-pulse"></div>
-          <Loader2 className="relative text-blue-600 dark:text-blue-400 animate-spin" size={48} />
+          <Loader2
+            className="relative text-blue-600 dark:text-blue-400 animate-spin"
+            size={48}
+          />
         </div>
         <p className="mt-6 text-lg font-medium text-slate-700 dark:text-slate-300">
           Loading idea details...
@@ -71,7 +113,10 @@ const IdeaDetailsPage = () => {
           onClick={() => navigate("/dashboard")}
           className="mb-6 flex items-center gap-2 text-blue-700 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium transition-colors duration-200 group"
         >
-          <ArrowLeft size={20} className="transform group-hover:-translate-x-1 transition-transform duration-200" />
+          <ArrowLeft
+            size={20}
+            className="transform group-hover:-translate-x-1 transition-transform duration-200"
+          />
           <span>Back to Dashboard</span>
         </button>
 
@@ -90,7 +135,10 @@ const IdeaDetailsPage = () => {
               </div>
               <div className="flex-1">
                 <div className="inline-flex items-center gap-2 bg-blue-100 dark:bg-blue-900/30 px-3 py-1 rounded-full mb-3">
-                  <Sparkles className="text-blue-600 dark:text-blue-400" size={14} />
+                  <Sparkles
+                    className="text-blue-600 dark:text-blue-400"
+                    size={14}
+                  />
                   <span className="text-xs font-semibold text-blue-700 dark:text-blue-300">
                     AI Analysis
                   </span>
@@ -101,10 +149,11 @@ const IdeaDetailsPage = () => {
                 <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400">
                   <Calendar size={16} />
                   <span className="text-sm">
-                    Analyzed on {new Date(idea.createdAt).toLocaleDateString('en-US', { 
-                      year: 'numeric', 
-                      month: 'long', 
-                      day: 'numeric' 
+                    Analyzed on{" "}
+                    {new Date(idea.createdAt).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
                     })}
                   </span>
                 </div>
@@ -115,7 +164,8 @@ const IdeaDetailsPage = () => {
             <div className="h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-700 to-transparent my-8"></div>
 
             {/* Analysis content */}
-            <div className="prose prose-lg max-w-none 
+            <div
+              className="prose prose-lg max-w-none 
               prose-headings:text-slate-800 dark:prose-headings:text-slate-100
               prose-headings:font-bold prose-headings:mb-4 prose-headings:mt-8
               prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl
@@ -152,6 +202,13 @@ const IdeaDetailsPage = () => {
               </button>
             </div>
           </div>
+
+          <button
+            onClick={handleGeneratePitchDeck}
+            className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold px-6 py-2.5 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300"
+          >
+            🎯 <span>Generate Pitch Deck PDF</span>
+          </button>
         </div>
       </div>
     </div>
