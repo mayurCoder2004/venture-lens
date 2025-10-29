@@ -189,26 +189,29 @@ const IdeaDetailsPage = () => {
 
           {/* Bottom section with action buttons */}
           <div className="bg-slate-50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-700 px-8 md:px-12 py-6">
-            <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                Need to analyze another idea?
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 flex-wrap">
+              <p className="text-sm text-slate-600 dark:text-slate-400 text-center sm:text-left">
+                What would you like to do next?
               </p>
-              <button
-                onClick={() => navigate("/analyze")}
-                className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold px-6 py-2.5 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300"
-              >
-                <Sparkles size={18} />
-                <span>New Analysis</span>
-              </button>
+
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button
+                  onClick={() => navigate("/analyze")}
+                  className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold px-6 py-2.5 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300"
+                >
+                  <Sparkles size={18} />
+                  <span>New Analysis</span>
+                </button>
+
+                <button
+                  onClick={handleGeneratePitchDeck}
+                  className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold px-6 py-2.5 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300"
+                >
+                  🎯 <span>Generate Pitch Deck PDF</span>
+                </button>
+              </div>
             </div>
           </div>
-
-          <button
-            onClick={handleGeneratePitchDeck}
-            className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold px-6 py-2.5 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300"
-          >
-            🎯 <span>Generate Pitch Deck PDF</span>
-          </button>
         </div>
       </div>
     </div>
