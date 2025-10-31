@@ -1,7 +1,8 @@
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, BarChart, Bar
+  PieChart, Pie, Cell, BarChart, Bar, Legend
 } from "recharts";
+import { TrendingUp, Target, Trophy, Calendar, PieChartIcon } from "lucide-react";
 
 const COLORS = ["#3B82F6", "#8B5CF6", "#10B981", "#F59E0B", "#EF4444"];
 
@@ -39,76 +40,245 @@ const AdvancedAnalytics = ({ ideas }) => {
     count,
   }));
 
+  // Custom tooltip component
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg p-3">
+          <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">{label}</p>
+          {payload.map((entry, index) => (
+            <p key={index} className="text-sm text-slate-600 dark:text-slate-400">
+              {entry.name}: <span className="font-bold" style={{ color: entry.color }}>{entry.value}</span>
+            </p>
+          ))}
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
-    <div className="mt-12 grid lg:grid-cols-2 gap-8">
-      {/* Score Trend */}
-      <div className="shadow-md rounded-xl bg-white">
-        <div className="p-6">
-          <h3 className="text-xl font-semibold mb-4 text-slate-800">📈 Average Score Trend</h3>
-          <ResponsiveContainer width="100%" height={250}>
-            <LineChart data={scoreTrend}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="score" stroke="#3B82F6" strokeWidth={2} />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
+    <div className="mt-12">
+      {/* Section Header */}
+      <div className="mb-8">
+        <h2 className="text-3xl font-bold text-slate-800 dark:text-slate-100 mb-2">
+          Advanced Analytics
+        </h2>
+        <p className="text-slate-600 dark:text-slate-400">
+          Deep insights into your idea portfolio and performance metrics
+        </p>
       </div>
 
-      {/* Category Distribution */}
-      <div className="shadow-md rounded-xl bg-white">
-        <div className="p-6">
-          <h3 className="text-xl font-semibold mb-4 text-slate-800">🧩 Category Distribution</h3>
-          <ResponsiveContainer width="100%" height={250}>
-            <PieChart>
-              <Pie
-                data={categoryData}
-                dataKey="value"
-                nameKey="name"
-                outerRadius={100}
-                label
-              >
-                {categoryData.map((_, i) => (
-                  <Cell key={i} fill={COLORS[i % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
+      <div className="grid lg:grid-cols-2 gap-6">
+        {/* Score Trend */}
+        <div className="group relative bg-white dark:bg-slate-800 rounded-2xl shadow-lg hover:shadow-2xl border border-slate-200 dark:border-slate-700 transition-all duration-300 overflow-hidden">
+          {/* Top gradient accent */}
+          <div className="h-1 bg-gradient-to-r from-blue-500 to-blue-600"></div>
+          
+          <div className="p-6">
+            {/* Header */}
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 rounded-xl flex items-center justify-center">
+                <TrendingUp className="text-blue-600 dark:text-blue-400" size={24} />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100">
+                  Average Score Trend
+                </h3>
+                <p className="text-sm text-slate-600 dark:text-slate-400">
+                  Track your ideas performance over time
+                </p>
+              </div>
+            </div>
 
-      {/* Top Performing Ideas */}
-      <div className="shadow-md rounded-xl bg-white">
-        <div className="p-6">
-          <h3 className="text-xl font-semibold mb-4 text-slate-800">🏆 Top Performing Ideas</h3>
-          <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={topIdeas}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="score" fill="#8B5CF6" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
+            {/* Chart */}
+            <div className="bg-slate-50 dark:bg-slate-900/50 rounded-xl p-4">
+              <ResponsiveContainer width="100%" height={250}>
+                <LineChart data={scoreTrend}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                  <XAxis 
+                    dataKey="date" 
+                    stroke="#64748b"
+                    style={{ fontSize: '12px' }}
+                  />
+                  <YAxis 
+                    stroke="#64748b"
+                    style={{ fontSize: '12px' }}
+                  />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Line 
+                    type="monotone" 
+                    dataKey="score" 
+                    stroke="#3B82F6" 
+                    strokeWidth={3}
+                    dot={{ fill: '#3B82F6', strokeWidth: 2, r: 4 }}
+                    activeDot={{ r: 6 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
 
-      {/* Monthly Analysis */}
-      <div className="shadow-md rounded-xl bg-white">
-        <div className="p-6">
-          <h3 className="text-xl font-semibold mb-4 text-slate-800">📅 Monthly Idea Analysis Count</h3>
-          <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={monthlyData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="count" fill="#10B981" />
-            </BarChart>
-          </ResponsiveContainer>
+          {/* Bottom accent line */}
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+        </div>
+
+        {/* Category Distribution */}
+        <div className="group relative bg-white dark:bg-slate-800 rounded-2xl shadow-lg hover:shadow-2xl border border-slate-200 dark:border-slate-700 transition-all duration-300 overflow-hidden">
+          {/* Top gradient accent */}
+          <div className="h-1 bg-gradient-to-r from-purple-500 to-purple-600"></div>
+          
+          <div className="p-6">
+            {/* Header */}
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-900/30 dark:to-purple-800/30 rounded-xl flex items-center justify-center">
+                <PieChartIcon className="text-purple-600 dark:text-purple-400" size={24} />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100">
+                  Category Distribution
+                </h3>
+                <p className="text-sm text-slate-600 dark:text-slate-400">
+                  Breakdown of ideas by category
+                </p>
+              </div>
+            </div>
+
+            {/* Chart */}
+            <div className="bg-slate-50 dark:bg-slate-900/50 rounded-xl p-4 flex justify-center">
+              <ResponsiveContainer width="100%" height={250}>
+                <PieChart>
+                  <Pie
+                    data={categoryData}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={90}
+                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    labelLine={true}
+                  >
+                    {categoryData.map((_, i) => (
+                      <Cell 
+                        key={i} 
+                        fill={COLORS[i % COLORS.length]}
+                        className="hover:opacity-80 transition-opacity cursor-pointer"
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip content={<CustomTooltip />} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* Bottom accent line */}
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+        </div>
+
+        {/* Top Performing Ideas */}
+        <div className="group relative bg-white dark:bg-slate-800 rounded-2xl shadow-lg hover:shadow-2xl border border-slate-200 dark:border-slate-700 transition-all duration-300 overflow-hidden">
+          {/* Top gradient accent */}
+          <div className="h-1 bg-gradient-to-r from-yellow-500 to-orange-500"></div>
+          
+          <div className="p-6">
+            {/* Header */}
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-yellow-900/30 dark:to-orange-800/30 rounded-xl flex items-center justify-center">
+                <Trophy className="text-yellow-600 dark:text-yellow-400" size={24} />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100">
+                  Top Performing Ideas
+                </h3>
+                <p className="text-sm text-slate-600 dark:text-slate-400">
+                  Your highest-scoring concepts
+                </p>
+              </div>
+            </div>
+
+            {/* Chart */}
+            <div className="bg-slate-50 dark:bg-slate-900/50 rounded-xl p-4">
+              <ResponsiveContainer width="100%" height={250}>
+                <BarChart data={topIdeas}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                  <XAxis 
+                    dataKey="name" 
+                    stroke="#64748b"
+                    style={{ fontSize: '11px' }}
+                    angle={-15}
+                    textAnchor="end"
+                    height={80}
+                  />
+                  <YAxis 
+                    stroke="#64748b"
+                    style={{ fontSize: '12px' }}
+                  />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Bar 
+                    dataKey="score" 
+                    fill="#8B5CF6"
+                    radius={[8, 8, 0, 0]}
+                    className="hover:opacity-80 transition-opacity cursor-pointer"
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* Bottom accent line */}
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-yellow-500 to-orange-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+        </div>
+
+        {/* Monthly Analysis */}
+        <div className="group relative bg-white dark:bg-slate-800 rounded-2xl shadow-lg hover:shadow-2xl border border-slate-200 dark:border-slate-700 transition-all duration-300 overflow-hidden">
+          {/* Top gradient accent */}
+          <div className="h-1 bg-gradient-to-r from-green-500 to-emerald-500"></div>
+          
+          <div className="p-6">
+            {/* Header */}
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-800/30 rounded-xl flex items-center justify-center">
+                <Calendar className="text-green-600 dark:text-green-400" size={24} />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100">
+                  Monthly Idea Count
+                </h3>
+                <p className="text-sm text-slate-600 dark:text-slate-400">
+                  Analysis activity by month
+                </p>
+              </div>
+            </div>
+
+            {/* Chart */}
+            <div className="bg-slate-50 dark:bg-slate-900/50 rounded-xl p-4">
+              <ResponsiveContainer width="100%" height={250}>
+                <BarChart data={monthlyData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                  <XAxis 
+                    dataKey="month" 
+                    stroke="#64748b"
+                    style={{ fontSize: '12px' }}
+                  />
+                  <YAxis 
+                    stroke="#64748b"
+                    style={{ fontSize: '12px' }}
+                  />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Bar 
+                    dataKey="count" 
+                    fill="#10B981"
+                    radius={[8, 8, 0, 0]}
+                    className="hover:opacity-80 transition-opacity cursor-pointer"
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* Bottom accent line */}
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-500 to-emerald-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
         </div>
       </div>
     </div>
