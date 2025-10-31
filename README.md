@@ -341,8 +341,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🗺️ Roadmap
 
-- [ ] PDF pitch deck generation
-- [ ] Advanced analytics dashboard
 - [ ] Collaboration features
 - [ ] Idea versioning
 - [ ] Social sharing capabilities
