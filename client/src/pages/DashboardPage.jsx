@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { getIdeas, deleteIdea } from "../utils/api";
 import DashboardStats from "../components/dashboard/DashboardStats";
 import { useNavigate } from "react-router-dom";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 import { Plus, Trash2, Eye, Lightbulb, Calendar, Loader2 } from "lucide-react";
 import AdvancedAnalytics from "../components/dashboard/AdvancedAnalytics";
 
@@ -10,18 +10,17 @@ const DashboardPage = () => {
   const [ideas, setIdeas] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const hasFetched = useRef(false); // ✅ Prevent double fetch
+  const hasFetched = useRef(false);
 
   const fetchIdeas = async () => {
     try {
-      console.log("Fetching ideas..."); // For debugging
       const res = await getIdeas();
       setIdeas(res.data);
     } catch (err) {
       console.error("Failed to fetch ideas", err);
-      toast.error('Failed to fetch ideas. Please try again.', {
+      toast.error("Failed to fetch ideas. Please try again.", {
         duration: 4000,
-        position: 'top-center',
+        position: "top-center",
       });
     } finally {
       setLoading(false);
@@ -37,24 +36,24 @@ const DashboardPage = () => {
           <button
             onClick={async () => {
               toast.dismiss(t.id);
-              const loadingToast = toast.loading('Deleting idea...', {
-                position: 'top-center',
+              const loadingToast = toast.loading("Deleting idea...", {
+                position: "top-center",
               });
 
               try {
                 await deleteIdea(id);
                 setIdeas((prev) => prev.filter((idea) => idea._id !== id));
                 toast.dismiss(loadingToast);
-                toast.success('Idea deleted successfully! 🗑️', {
+                toast.success("Idea deleted successfully! 🗑️", {
                   duration: 3000,
-                  position: 'top-center',
+                  position: "top-center",
                 });
               } catch (err) {
                 console.error("Error deleting idea:", err);
                 toast.dismiss(loadingToast);
-                toast.error('Failed to delete idea. Please try again.', {
+                toast.error("Failed to delete idea. Please try again.", {
                   duration: 4000,
-                  position: 'top-center',
+                  position: "top-center",
                 });
               }
             }}
@@ -72,18 +71,17 @@ const DashboardPage = () => {
       </div>
     ), {
       duration: Infinity,
-      position: 'top-center',
+      position: "top-center",
       style: {
-        background: '#fff',
-        color: '#1e293b',
-        padding: '16px',
-        borderRadius: '12px',
-        minWidth: '300px',
+        background: "#fff",
+        color: "#1e293b",
+        padding: "16px",
+        borderRadius: "12px",
+        minWidth: "300px",
       },
     });
   };
 
-  // ✅ Prevent duplication due to React Strict Mode
   useEffect(() => {
     if (!hasFetched.current) {
       fetchIdeas();
@@ -106,25 +104,25 @@ const DashboardPage = () => {
 
   return (
     <>
-      <Toaster 
+      <Toaster
         toastOptions={{
           style: {
-            background: '#363636',
-            color: '#fff',
-            padding: '16px',
-            borderRadius: '12px',
-            fontSize: '14px',
-            fontWeight: '500',
+            background: "#363636",
+            color: "#fff",
+            padding: "16px",
+            borderRadius: "12px",
+            fontSize: "14px",
+            fontWeight: "500",
           },
-          success: { style: { background: '#10b981' } },
-          error: { style: { background: '#ef4444' } },
-          loading: { style: { background: '#3b82f6' } },
+          success: { style: { background: "#10b981" } },
+          error: { style: { background: "#ef4444" } },
+          loading: { style: { background: "#3b82f6" } },
         }}
       />
 
       <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800 py-8 px-4">
         <div className="max-w-7xl mx-auto mt-20">
-          {/* Header Section */}
+          {/* Header */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
             <div>
               <div className="flex items-center gap-3 mb-2">
@@ -136,7 +134,7 @@ const DashboardPage = () => {
                 </h1>
               </div>
               <p className="text-slate-600 dark:text-slate-400 ml-15">
-                Track and manage all your validated startup ideas
+                Track and manage all your startup ideas in one place
               </p>
             </div>
             <button
@@ -148,15 +146,15 @@ const DashboardPage = () => {
             </button>
           </div>
 
-          {/* Stats Section */}
+          {/* Stats */}
           <div className="mb-8">
             <DashboardStats ideas={ideas} />
           </div>
 
-          {/* Advanced Analytics Section */}
-<AdvancedAnalytics ideas={ideas} />
+          {/* Analytics */}
+          <AdvancedAnalytics ideas={ideas} />
 
-          {/* Ideas Grid Section */}
+          {/* Ideas */}
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-4">
               Your Ideas
@@ -170,17 +168,16 @@ const DashboardPage = () => {
                   key={idea._id}
                   className="group relative bg-white dark:bg-slate-800 rounded-2xl shadow-lg hover:shadow-2xl border border-slate-200 dark:border-slate-700 p-6 transition-all duration-300 transform hover:-translate-y-1"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
                   <div className="relative">
                     <div className="inline-flex items-center justify-center w-10 h-10 bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-lg mb-4">
                       <Lightbulb className="text-blue-600 dark:text-blue-400" size={20} />
                     </div>
 
-                    <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100 mb-3 line-clamp-2 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors duration-300">
+                    <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100 mb-2 line-clamp-2 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors duration-300">
                       {idea.idea || "Untitled Idea"}
                     </h2>
 
+                    {/* Removed Score display */}
                     <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 mb-6">
                       <Calendar size={16} />
                       <span>{new Date(idea.createdAt).toLocaleDateString()}</span>
@@ -202,7 +199,6 @@ const DashboardPage = () => {
                       </button>
                     </div>
                   </div>
-                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-b-2xl transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
                 </div>
               ))}
             </div>
@@ -218,7 +214,7 @@ const DashboardPage = () => {
                 No Ideas Yet
               </h3>
               <p className="text-slate-600 dark:text-slate-400 mb-6 text-center max-w-md">
-                Start your entrepreneurial journey by analyzing your first startup idea
+                Start your entrepreneurial journey by analyzing your first idea!
               </p>
               <button
                 onClick={() => navigate("/analyze")}

@@ -15,6 +15,10 @@ const ideaSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    score: {
+      type: Number,
+      default: 0, // default to 0 if not calculated
+    },
   },
   { timestamps: true }
 );

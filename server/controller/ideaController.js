@@ -9,18 +9,34 @@ export const analyzeIdea = async (req, res) => {
 
     if (!idea) return res.status(400).json({ message: "Idea is required" });
 
+    // 🧠 Get AI analysis
     const analysis = await analyzeIdeaWithOpenRouter(idea);
 
+    // 🎯 Extract viability score using regex (e.g., "Rating: 7/10" or "Score: 8/10")
+    let score = null;
+    const match = analysis.match(/Rating:\s*(\d+)\s*\/10/i) || analysis.match(/Score:\s*(\d+)\s*\/10/i);
+    if (match) {
+      score = Number(match[1]);
+    }
+
+    // 💾 Save idea with score
     const savedIdea = await Idea.create({
       user: userId,
       idea,
       analysis,
+      score, // ← now stored in DB
     });
 
-    res.status(201).json({ message: "Idea analyzed successfully", idea: savedIdea });
+    res.status(201).json({
+      message: "Idea analyzed successfully",
+      idea: savedIdea,
+    });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Failed to analyze idea", error: err.message });
+    console.error("❌ Error analyzing idea:", err);
+    res.status(500).json({
+      message: "Failed to analyze idea",
+      error: err.message,
+    });
   }
 };
 
