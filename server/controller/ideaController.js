@@ -12,19 +12,35 @@ export const analyzeIdea = async (req, res) => {
     // 🧠 Get AI analysis
     const analysis = await analyzeIdeaWithOpenRouter(idea);
 
-    // 🎯 Extract viability score using regex (e.g., "Rating: 7/10" or "Score: 8/10")
+    // 🎯 Extract viability score
     let score = null;
-    const match = analysis.match(/Rating:\s*(\d+)\s*\/10/i) || analysis.match(/Score:\s*(\d+)\s*\/10/i);
-    if (match) {
-      score = Number(match[1]);
+    const match =
+      analysis.match(/Rating:\s*(\d+)\s*\/10/i) ||
+      analysis.match(/Score:\s*(\d+)\s*\/10/i);
+    if (match) score = Number(match[1]);
+
+    // 🏷️ Extract Category (e.g., “Category: AgriTech”)
+    let category = "Uncategorized";
+    const catMatch = analysis.match(/Category:\s*(.*)/i);
+    if (catMatch && catMatch[1]) {
+      category = catMatch[1].trim().split(/\n|\.|,/)[0]; // take first word/line
+    } else {
+      // fallback: infer category from idea keywords
+      if (/farm|agri|crop|soil/i.test(idea)) category = "AgriTech";
+      else if (/health|medic|care|hospital/i.test(idea)) category = "HealthTech";
+      else if (/fintech|bank|payment|crypto/i.test(idea)) category = "FinTech";
+      else if (/edu|learn|teach/i.test(idea)) category = "EdTech";
+      else if (/travel|tour/i.test(idea)) category = "TravelTech";
+      else if (/ai|machine|data/i.test(idea)) category = "AI / Data";
     }
 
-    // 💾 Save idea with score
+    // 💾 Save in database
     const savedIdea = await Idea.create({
       user: userId,
       idea,
       analysis,
-      score, // ← now stored in DB
+      score,
+      category,
     });
 
     res.status(201).json({

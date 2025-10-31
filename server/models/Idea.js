@@ -17,7 +17,11 @@ const ideaSchema = new mongoose.Schema(
     },
     score: {
       type: Number,
-      default: 0, // default to 0 if not calculated
+      default: null,
+    },
+    category: {
+      type: String,
+      default: "Uncategorized",
     },
   },
   { timestamps: true }
