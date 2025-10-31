@@ -4,6 +4,7 @@ import DashboardStats from "../components/dashboard/DashboardStats";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
 import { Plus, Trash2, Eye, Lightbulb, Calendar, Loader2 } from "lucide-react";
+import AdvancedAnalytics from "../components/dashboard/AdvancedAnalytics";
 
 const DashboardPage = () => {
   const [ideas, setIdeas] = useState([]);
@@ -151,6 +152,9 @@ const DashboardPage = () => {
           <div className="mb-8">
             <DashboardStats ideas={ideas} />
           </div>
+
+          {/* Advanced Analytics Section */}
+<AdvancedAnalytics ideas={ideas} />
 
           {/* Ideas Grid Section */}
           <div className="mb-6">
