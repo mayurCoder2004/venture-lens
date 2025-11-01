@@ -2,6 +2,7 @@ import { analyzeIdeaWithOpenRouter } from "../services/openRouterService.js";
 import Idea from "../models/Idea.js";
 import PDFDocument from "pdfkit";
 import User from "../models/User.js";
+import { sendInviteEmail } from "../services/mailService.js";
 
 export const analyzeIdea = async (req, res) => {
   try {
