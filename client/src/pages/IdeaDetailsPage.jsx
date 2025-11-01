@@ -214,7 +214,7 @@ const IdeaDetailsPage = () => {
                   🎯 <span>Generate Pitch Deck PDF</span>
                 </button>
 
-                <InviteCollaborator ideaId={idea._id} token={user.token} />
+                {/* <InviteCollaborator ideaId={idea._id} token={user.token} /> */}
               </div>
             </div>
           </div>
