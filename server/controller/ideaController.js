@@ -1,6 +1,7 @@
 import { analyzeIdeaWithOpenRouter } from "../services/openRouterService.js";
 import Idea from "../models/Idea.js";
 import PDFDocument from "pdfkit";
+import User from "../models/User.js";
 
 export const analyzeIdea = async (req, res) => {
   try {
@@ -257,3 +258,38 @@ export const generatePitchDeck = async (req, res) => {
   }
 };
 
+// POST /api/ideas/:id/invite
+export const inviteCollaborator = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const { id } = req.params;
+
+    // Find the idea by ID
+    const idea = await Idea.findById(id);
+    if (!idea) return res.status(404).json({ message: "Idea not found" });
+
+    // Ensure only the owner can invite
+    if (idea.user.toString() !== req.user.id.toString()) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    // Get inviter (user who’s logged in)
+    const inviter = await User.findById(req.user.id);
+    if (!inviter) return res.status(404).json({ message: "Inviter not found" });
+
+    // Send invitation email using Mailtrap
+    await sendInviteEmail(email, idea.idea, inviter.name);
+
+    // (Optional) If you still want to store collaborators, you can skip email check
+    const collaborator = await User.findOne({ email });
+    if (collaborator && !idea.collaborators?.includes(collaborator._id)) {
+      idea.collaborators.push(collaborator._id);
+      await idea.save();
+    }
+
+    res.status(200).json({ message: "Invite sent successfully (check Mailtrap inbox)" });
+  } catch (error) {
+    console.error("❌ Error inviting collaborator:", error);
+    res.status(500).json({ message: "Failed to send invite", error: error.message });
+  }
+};

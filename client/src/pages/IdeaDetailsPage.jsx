@@ -11,12 +11,16 @@ import {
   AlertCircle,
   Sparkles,
 } from "lucide-react";
+import InviteCollaborator from "../components/idea-details-page/InviteCollaborator";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const IdeaDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [idea, setIdea] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { user, token } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchIdea = async () => {
@@ -209,6 +213,8 @@ const IdeaDetailsPage = () => {
                 >
                   🎯 <span>Generate Pitch Deck PDF</span>
                 </button>
+
+                <InviteCollaborator ideaId={idea._id} token={user.token} />
               </div>
             </div>
           </div>

@@ -15,14 +15,13 @@ const ideaSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    score: {
-      type: Number,
-      default: null,
-    },
-    category: {
-      type: String,
-      default: "Uncategorized",
-    },
+    // 🆕 Collaborators who can view/edit
+    collaborators: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   { timestamps: true }
 );
